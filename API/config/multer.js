@@ -1,3 +1,5 @@
+// Descrição: Arquivo responsável pelo que foi armazenado
+
 const multer = require('multer')
 
 const storage = multer.diskStorage({

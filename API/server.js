@@ -1,6 +1,8 @@
+// Descrição: Arquivo responsável por toda a configuração e execução de todo o Back-End
+
 const compression = require('Compression')
 const express = require('express')
-// const ejs = require('ejs')
+const ejs = require('ejs')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
@@ -18,7 +20,8 @@ app.use('/public/images', express.static(__dirname + '/public/images'))
 // MongodDB
 const dbs = require('./config/database')
 const dbURI = isProduction ? dbs.dbProdution : dbs.dbTest
-mongoose.connect(dbURI, { useNewUrlParser: true })
+mongoose.set('useCreateIndex', true);
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // EJS
 app.set('view engine', 'ejs')
@@ -45,11 +48,11 @@ app.use((req, res, next) => {
 })
 
 // 422, 500, 401 ...
-app.use((error, req, res) => {
-  res.status(error.status || 500)
-  if(error.status !== 404)  console.warn('Error: ', error.message, new Date());
-  res.json({ errors: { message: error.message, status: error.status } })
-})
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  if(err.status !== 404) console.warn("Error: ", err.message, new Date());
+  res.json(err);
+});
 
 // Executando
 app.listen(PORT, (error) => {

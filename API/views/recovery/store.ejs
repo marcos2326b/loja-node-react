@@ -1,0 +1,52 @@
+<!-- Descrição: Arquivo responsável pela pagána de recuperação de senha -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3 col-sm-offset-3">
+          <h2>Recuperar Senha</h2>
+          <hr/>
+          <br/>
+
+          <!-- Mostra mensagem de sucesso-->
+          <% if(success){ %>
+            <div class="alert alert-success">
+              <%= success %>
+            </div>
+            <div class="text-center">
+              <h3>Agora pode fazer seu login novamente :)</h3>
+            </div>
+          <% } %>
+
+          <!-- Mostra mensagem de erro-->
+          <% if(error){ %>
+              <div class="alert alert-danger">
+                <%= error %>
+              </div>
+          <% } %>
+
+          <!-- Se sucess for null mostra o form para definir a nova senha-->
+          <% if(!success) { %>
+          <p>Digite aqui sua nova senha</p>
+          
+          <!-- Envia o form para a rota de redefinir senha-->
+          <form action="/v1/api/usuarios/senha-recuperada" method="POST">
+            <input type="hidden" name="token" value="<%= token %>" />
+            <div class="form-group">
+              <input type="password" name="password" class="form-control" placeholder="Digite sua nova senha"/>
+            </div>
+            <button class="btn btn-primary">
+              Criar Nova Senha
+            </button>
+          </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
