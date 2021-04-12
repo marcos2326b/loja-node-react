@@ -5,7 +5,7 @@ const Usuario = mongoose.model('Usuario')
 const enviarEmailRecovery = require('../helpers/email-recovery')
 
 class UsuarioController {
-  // ----------------------------------------------------- LISTAGEM DE USUARIOS -----------------------------------------------------
+  // ----------------------------------------------------- LISTAGEM DE DADOS -----------------------------------------------------
   // GET /
   index(req, res, next) {
     // Busca o id

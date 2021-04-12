@@ -1,4 +1,4 @@
-// Descrição: Arquivo responsável por todas as rotas da v1
+// Descrição: Arquivo responsável por todas as rotas dos usuarios
 
 const router = require('express').Router()
 const auth = require('../../auth')

@@ -1,4 +1,4 @@
-// Descrição: Arquivo responsável por fazer a chamada das models
+// Descrição: Arquivo responsável pelo modelo do usuario
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
