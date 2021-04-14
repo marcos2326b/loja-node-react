@@ -39,12 +39,13 @@ class UsuarioController {
 
   // ----------------------------------------------------- AÇÕES DE USUARIOS -----------------------------------------------------
   // POST /login
-  login(req, res, next) {
+  login (req, res, next) {
     // Pega os dados no body
     const { email, password } = req.body
+    
     // Vefica se os dados passados estão vazios 
-    if (!email) return res.status(422).json({ errors: { email: 'não pode ficar vazio!!' } })
-    if (!password) return res.status(422).json({ errors: { password: 'não pode ficar vazio!!' } })
+    // if (!email) return res.status(422).json({ errors: { email: 'não pode ficar vazio!!' } })
+    // if (!password) return res.status(422).json({ errors: { password: 'não pode ficar vazio!!' } })
 
     // Busca pelo email
     Usuario.findOne({ email })
@@ -63,7 +64,7 @@ class UsuarioController {
     // Pega os dados no body
     const { nome, email, password, loja } = req.body
     // Verifica se os campoes estão vazios
-    if (!nome || !email || !password || !loja) return res.status(422).json({ errors: '`Preencha todos os campos de cadastro!!' })
+    // if (!nome || !email || !password || !loja) return res.status(422).json({ errors: '`Preencha todos os campos de cadastro!!' })
 
     // Cria um novo usuario
     const usuario = new Usuario({ nome, email, loja })

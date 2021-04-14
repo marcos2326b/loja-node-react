@@ -2,16 +2,19 @@
 
 const router = require('express').Router()
 const auth = require('../../auth')
-const UsuarioController = require('../../../controllers/UsuarioController')
 
+const UsuarioController = require('../../../controllers/UsuarioController')
 const usuarioController = new UsuarioController()
 
+const Validation = require('express-validation')
+const { UsuarioValidation } = require('../../../controllers/validations/usuarioValidation')
+
 // /v1/api/usuarios/login - TESTADO
-router.post('/login', usuarioController.login)
+router.post('/login', Validation(UsuarioValidation.login), usuarioController.login)
 // /v1/api/usuarios/registrar - TESTADO
-router.post('/registrar', usuarioController.store)
+router.post('/registrar', Validation(UsuarioValidation.store), usuarioController.store)
 // /v1/api/usuarios/ - TESTADO
-router.put('/', auth.required, usuarioController.update)
+router.put('/', auth.required, Validation(UsuarioValidation.update), usuarioController.update)
 // /v1/api/usuarios/ - TESTADO
 router.delete('/', auth.required, usuarioController.remove)
 
@@ -27,6 +30,6 @@ router.post('/senha-recuperada', usuarioController.completeRecovery)
 // /v1/api/usuarios/ - TESTADO
 router.get('/', auth.required, usuarioController.index)
 // /v1/api/usuarios/:id - TESTADO
-router.get('/:id', auth.required, usuarioController.show)
+router.get('/:id', auth.required, Validation(UsuarioValidation.show), usuarioController.show)
 
 module.exports = router
