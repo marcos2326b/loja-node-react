@@ -28,16 +28,6 @@ class LojaController {
   store(req, res, next) {
     // Pega os dados no body
     const { nome, cnpj, email, telefones, endereco } = req.body
-
-    // Verifica se os campos estão preenchidos
-    // const error = []
-    // if(!nome) error.push('nome')
-    // if(!cnpj) error.push('cnpj')
-    // if(!email) error.push('email')
-    // if(!telefones) error.push('telefones')
-    // if(!endereco) error.push('endereco')
-    // if(error.length > 0) return res.status(422).json({ error: 'required', payload: error })
-
     // Cria uma nova loja
     const loja = new Loja({ nome, cnpj, email, telefones, endereco })
     // Salva a nova loja e envia os dados
@@ -49,7 +39,6 @@ class LojaController {
   update(req, res, next) {
     // Pega os dados no body
     const { nome, cnpj, email, telefones, endereco } = req.body
-
     // Busca a loja por id
     Loja.findById(req.query.loja)
       .then(loja => {
