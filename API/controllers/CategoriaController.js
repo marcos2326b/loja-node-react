@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose')
 const Categoria = mongoose.model('Categoria')
+const Produto = mongoose.model('Produto')
 
 class CategoriaController {
   // ----------------------------------------------------- LISTAGEM DE DADOS -----------------------------------------------------
@@ -86,7 +87,61 @@ class CategoriaController {
   }
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  // ----------------------------------------------------- PRODUTOS -----------------------------------------------------
+  // ----------------------------------------------------- PRODUTOS -----------------------------------------------------------------
+  // GET /:id/produtos
+  async showProdutos(req, res, next) {
+    // Pega os dados
+    const { offset, limit } = req.query
+
+    try {
+      // Mostra produtos com paginate
+      const produtos = await Produto
+        .paginate(
+          { categoria: req.params.id },
+          { offset: Number(offset) || 0, limit: Number(limit) || 30 }
+        )
+      return res.send({ produtos })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  // PUT /:id/produtos
+  async updateProdutos(req, res, next) {
+    try {
+      // Pega a categoria
+      const categoria = await Categoria.findById(req.params.id);
+      // Pega o produto e atualiza os dados
+      const { produtos } = req.body;
+      if (produtos) categoria.produtos = produtos;
+      // Salva a categoria
+      await categoria.save();
+
+      // Busca o produto
+      let _produtos = await Produto.find({
+        $or: [
+          { categoria: req.params.id },
+          { _id: { $in: produtos } }
+        ]
+      });
+      _produtos = await Promise.all(_produtos.map(async (produto) => {
+        // Verifica o produto
+        if (!produtos.includes(produto._id.toString())) {
+          produto.categoria = null;
+        } else {
+          produto.categoria = req.params.id;
+        }
+        await produto.save();
+        return produto;
+      }));
+
+      // Retorna os dados com paginate
+      const resultado = await Produto.paginate({ categoria: req.params.id }, { offset: 0, limit: 30 });
+      return res.send({ produtos: resultado });
+    } catch (e) {
+      next(e)
+    }
+  }
   // --------------------------------------------------------------------------------------------------------------------------------
 }
 module.exports = CategoriaController

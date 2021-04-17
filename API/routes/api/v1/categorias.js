@@ -26,5 +26,9 @@ router.put('/:id', auth.required, LojaValidation.admin, Validation(CategoriaVali
 router.delete('/:id', auth.required, LojaValidation.admin, Validation(CategoriaValidation.remove), categoriaController.remove)
 
 // ROTAS DO PRODUTO
+// /v1/api/categorias/:id/produtos - TESTADO
+router.get('/:id/produtos', categoriaController.showProdutos)
+// /v1/api/categorias/:id/produtos - TESTADO
+router.put('/:id/produtos', auth.required, LojaValidation.admin, categoriaController.updateProdutos)
 
 module.exports = router
