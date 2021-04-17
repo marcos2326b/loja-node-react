@@ -1,3 +1,5 @@
+// Descrição: Arquivo responsável pelo modelo do cliente
+
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate");
 const Schema = mongoose.Schema;
