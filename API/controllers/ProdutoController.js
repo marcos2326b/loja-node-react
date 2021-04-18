@@ -1,8 +1,10 @@
 // Descrição: Arquivo responsável pela lógica das rotas do produto
 
 const mongoose = require('mongoose')
+
 const Produto = mongoose.model('Produto')
 const Categoria = mongoose.model('Categoria')
+const Avaliacao = mongoose.model('Avaliacao')
 
 const getSort = (sortType) => {
   switch (sortType) {
@@ -241,6 +243,20 @@ class ProdutoController {
     }
   }
   // -------------------------------------------------------------------------------------------------------------------------------------------
+
+  // ----------------------------------------------------------- AVALIAÇÕES -----------------------------------------------------------
+  // GET /:id/avaliacoes
+  async showAvaliacoes(req, res, next) {
+    try {
+      // Pega todas as avaliações que tiverem o id igual ao produto passado no params serão retornadas
+      const avaliacoes = await Avaliacao.find({ produto: req.params.id })
+      // Retorna os dados das avaliações
+      return res.send({ avaliacoes })
+    } catch (e) {
+      next(e)
+    }
+  }
+  // ----------------------------------------------------------------------------------------------------------------------------------
 }
 
 module.exports = ProdutoController

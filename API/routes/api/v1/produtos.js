@@ -38,6 +38,7 @@ router.get('/:id', Validation(ProdutoValidation.show), produtoController.show)
 // ---------------------------------------------------------------------------------------------
 
 // ----------------------------------------- AVALIAÇÕES -----------------------------------------
-
+// /v1/api/produtos/:id/avaliacoes - TESTADO
+router.get('/:id/avaliacoes', produtoController.showAvaliacoes)
 // ----------------------------------------------------------------------------------------------
 module.exports = router
