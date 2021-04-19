@@ -23,6 +23,6 @@ const LojaSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-LojaSchema.plugin(uniqueValidator, { message: "já está sendo utilizado" });
+LojaSchema.plugin(uniqueValidator, { message: 'já está sendo utilizado' });
 
 module.exports = mongoose.model('Loja', LojaSchema)

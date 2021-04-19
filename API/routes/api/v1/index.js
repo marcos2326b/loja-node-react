@@ -8,6 +8,8 @@ const categoriasRoutes = require('./categorias')
 const produtosRoutes = require('./produtos')
 const avaliacoesRoutes = require('./avaliacoes')
 const variacoesRoutes = require('./variacoes')
+const PedidosRoutes = require('./pedidos')
+// const PagamentosRoutes = require('./pagamentos')
 
 router.use('/usuarios', usuarioRoutes)
 router.use('/lojas', lojaRoutes)
@@ -16,5 +18,7 @@ router.use('/categorias', categoriasRoutes)
 router.use('/produtos', produtosRoutes)
 router.use('/avaliacoes', avaliacoesRoutes)
 router.use('/variacoes', variacoesRoutes)
+router.use('/pedidos', PedidosRoutes)
+// router.use('/pagamentos', PagamentosRoutes)
 
 module.exports = router
