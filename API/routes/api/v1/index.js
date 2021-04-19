@@ -7,6 +7,7 @@ const clienteRoutes = require('./clientes')
 const categoriasRoutes = require('./categorias')
 const produtosRoutes = require('./produtos')
 const avaliacoesRoutes = require('./avaliacoes')
+const variacoesRoutes = require('./variacoes')
 
 router.use('/usuarios', usuarioRoutes)
 router.use('/lojas', lojaRoutes)
@@ -14,5 +15,6 @@ router.use('/clientes', clienteRoutes)
 router.use('/categorias', categoriasRoutes)
 router.use('/produtos', produtosRoutes)
 router.use('/avaliacoes', avaliacoesRoutes)
+router.use('/variacoes', variacoesRoutes)
 
 module.exports = router

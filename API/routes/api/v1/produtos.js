@@ -34,11 +34,12 @@ router.get('/:id', Validation(ProdutoValidation.show), produtoController.show)
 // ------------------------------------------------------------------------------------------------------
 
 // ----------------------------------------- VARIAÇÕES -----------------------------------------
-
+// /v1/api/produtos/:id/variacoes - TESTADO
+router.get('/:id/variacoes', Validation(ProdutoValidation.showVariacoes), produtoController.showVariacoes)
 // ---------------------------------------------------------------------------------------------
 
 // ----------------------------------------- AVALIAÇÕES -----------------------------------------
 // /v1/api/produtos/:id/avaliacoes - TESTADO
-router.get('/:id/avaliacoes', produtoController.showAvaliacoes)
+router.get('/:id/avaliacoes', Validation(ProdutoValidation.showAvaliacoes), produtoController.showAvaliacoes)
 // ----------------------------------------------------------------------------------------------
 module.exports = router
