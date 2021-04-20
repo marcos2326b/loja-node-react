@@ -8,9 +8,12 @@ const Variacao = mongoose.model('Variacao')
 const Pagamento = mongoose.model('Pagamento')
 const Entrega = mongoose.model('Entrega')
 const Cliente = mongoose.model('Cliente')
+const RegistroPedido = mongoose.model("RegistroPedido")
+
+const { calcularFrete } = require('./integrations/correios')
 
 const CarrinhoValidation = require('./validations/carrinhoValidation')
-// const EntregaValidation = require('./validations/entregaValidation')
+const EntregaValidation = require('./validations/entregaValidation')
 // const PagamentoValidation = require('./validations/pagamentoValidation')
 
 class PedidoController {
@@ -62,8 +65,8 @@ class PedidoController {
         // Retorna o item do carrinho
         return item
       }))
-      // Retorna os dados do pedido
-      return res.send({ pedido })
+      const registros = await RegistroPedido.find({ pedido: pedido._id });
+      return res.send({ pedido, registros });
     } catch (e) {
       next(e)
     }
@@ -76,6 +79,13 @@ class PedidoController {
 
       if (!pedido) res.status(400).send('Pedido não encontrado!!')
       pedido.cancelado = true
+
+      const registroPedido = new RegistroPedido({
+        pedido: pedido._id,
+        tipo: "pedido",
+        situacao: "pedido_cancelado"
+      })
+      await registroPedido.save();
 
       // Registro de atividades = pedido cancelado
       // Enviar Email para cliente = pedido cancelado
@@ -150,7 +160,9 @@ class PedidoController {
         item.variacao = await Variacao.findById(item.variacao);
         return item;
       }));
-      return res.send({ pedido });
+      const registros = await RegistroPedido.find({ pedido: pedido._id });
+      // const resultado = await calcularFrete({ cep: '62940000', produtos: pedido.carrinho });
+      return res.send({ pedido, registros });
     } catch (e) {
       next(e);
     }
@@ -163,12 +175,13 @@ class PedidoController {
     try {
       // Checar os dados do carrinho
       if (!await CarrinhoValidation(carrinho)) return res.status(422).send({ error: "Carrinho Inválido" });
-      // Checar os dados da entrega
-      // if (!EntregaValidation(carrinho, entrega)) return res.status(422).send({ error: 'Dados de entrega inválidos!!' })
-      // Checar os dados do pagamento
-      // if (!PagamentoValidation(carrinho, pagamento)) return res.status(422).send({ error: 'Dados de pagamento inválidos!!' })
 
       const cliente = await Cliente.findOne({ usuario: req.payload.id })
+
+      // Checar os dados da entrega
+      if (!await EntregaValidation.checarValorPrazo(cliente.endereco.CEP, carrinho, entrega)) return res.status(422).send({ error: 'Dados de entrega inválidos!!' })
+      // Checar os dados do pagamento
+      // if (!PagamentoValidation(carrinho, pagamento)) return res.status(422).send({ error: 'Dados de pagamento inválidos!!' })
 
       const novoPagamento = new Pagamento({
         valor: pagamento.valor,
@@ -202,6 +215,14 @@ class PedidoController {
       await novoPagamento.save()
       await novaEntrega.save()
 
+
+      const registroPedido = new RegistroPedido({
+        pedido: pedido._id,
+        tipo: "pedido",
+        situacao: "pedido_criado"
+      })
+      await registroPedido.save();
+
       // Notificar via email - cliente e admin = novo pedido
 
       return res.send({ pedido: Object.assign({}, pedido._doc, { entrega: novaEntrega, pagamento: novoPagamento, cliente }) })
@@ -220,6 +241,13 @@ class PedidoController {
 
       if (!pedido) res.status(400).send('Pedido não encontrado!!')
       pedido.cancelado = true
+
+      const registroPedido = new RegistroPedido({
+        pedido: pedido._id,
+        tipo: "pedido",
+        situacao: "pedido_cancelado"
+      })
+      await registroPedido.save();
 
       // Registro de atividades = pedido cancelado
       // Enviar Email para admin = pedido cancelado
